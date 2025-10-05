@@ -56,7 +56,7 @@ fn run_ventilator() -> Result<()> {
 fn run_worker() -> Result<()> {
     let worker_id = std::process::id();
     println!("Starting worker {} connecting to ventilator", worker_id);
-    
+
     let puller = Puller::new_connect("tcp://127.0.0.1:5557")?;
     let pusher = Pusher::new_connect("tcp://127.0.0.1:5558")?;
 
@@ -90,7 +90,10 @@ fn run_worker() -> Result<()> {
                 println!("Worker {} completed task #{}", worker_id, task_id);
             }
             None => {
-                println!("Worker {} timed out waiting for tasks, shutting down", worker_id);
+                println!(
+                    "Worker {} timed out waiting for tasks, shutting down",
+                    worker_id
+                );
                 break;
             }
         }

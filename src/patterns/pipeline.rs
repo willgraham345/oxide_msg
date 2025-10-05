@@ -1,6 +1,6 @@
 //! Push/Pull (pipeline) messaging pattern
 
-use crate::error::{Result, OxideError};
+use crate::error::{OxideError, Result};
 use crate::message::Message;
 use zmq::{Context, Socket};
 
@@ -105,7 +105,7 @@ mod tests {
         let worker_handle = thread::spawn(move || {
             // Give pusher time to bind
             thread::sleep(Duration::from_millis(100));
-            
+
             let puller = Puller::new_connect(address).unwrap();
             let task = puller.pull_timeout(1000).unwrap();
             assert!(task.is_some());

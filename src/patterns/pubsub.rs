@@ -1,6 +1,6 @@
 //! Publisher/Subscriber messaging pattern
 
-use crate::error::{Result, OxideError};
+use crate::error::{OxideError, Result};
 use crate::message::Message;
 use zmq::{Context, Socket};
 
@@ -87,7 +87,7 @@ impl Subscriber {
         self.socket
             .set_rcvtimeo(timeout_ms)
             .map_err(|e| OxideError::Configuration(e.to_string()))?;
-        
+
         match self.socket.recv_bytes(0) {
             Ok(bytes) => Ok(Some(Message::from_bytes(&bytes)?)),
             Err(zmq::Error::EAGAIN) => Ok(None),
@@ -115,13 +115,13 @@ mod tests {
     #[test]
     fn test_pubsub_basic() {
         let address = "tcp://127.0.0.1:5555";
-        
+
         // Create publisher in a separate thread
         let pub_handle = thread::spawn(move || {
             let publisher = Publisher::new(address).unwrap();
             // Give subscriber time to connect
             thread::sleep(Duration::from_millis(100));
-            
+
             let msg = Message::new("test", json!({"data": "hello"}));
             publisher.publish(&msg).unwrap();
         });
@@ -129,9 +129,9 @@ mod tests {
         // Create subscriber
         let subscriber = Subscriber::new(address).unwrap();
         subscriber.subscribe("").unwrap(); // Subscribe to all
-        
+
         pub_handle.join().unwrap();
-        
+
         // Try to receive with timeout
         let received = subscriber.receive_timeout(1000).unwrap();
         assert!(received.is_some());

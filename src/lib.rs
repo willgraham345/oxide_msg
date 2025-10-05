@@ -12,17 +12,16 @@
 //! - Support for serialization with JSON
 
 pub mod error;
-pub mod patterns;
 pub mod message;
+pub mod patterns;
 
-pub use error::{Result, OxideError};
+pub use error::{OxideError, Result};
 pub use message::Message;
-pub use patterns::{Publisher, Subscriber, Requester, Replier, Pusher, Puller};
+pub use patterns::{Publisher, Puller, Pusher, Replier, Requester, Subscriber};
 
 /// Re-export commonly used types
 pub mod prelude {
     pub use crate::{
-        Publisher, Subscriber, Requester, Replier, Pusher, Puller,
-        Message, Result, OxideError
+        Message, OxideError, Publisher, Puller, Pusher, Replier, Requester, Result, Subscriber,
     };
 }

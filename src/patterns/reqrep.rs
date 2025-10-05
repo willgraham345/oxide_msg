@@ -1,6 +1,6 @@
 //! Request/Reply messaging pattern
 
-use crate::error::{Result, OxideError};
+use crate::error::{OxideError, Result};
 use crate::message::Message;
 use zmq::{Context, Socket};
 

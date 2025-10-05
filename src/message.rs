@@ -1,7 +1,7 @@
 //! Message types and serialization
 
+use crate::error::{OxideError, Result};
 use serde::{Deserialize, Serialize};
-use crate::error::{Result, OxideError};
 
 /// A message that can be sent through the Oxide framework
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -23,8 +23,8 @@ impl Message {
 
     /// Create a message from a serializable value
     pub fn from_value<T: Serialize>(topic: impl Into<String>, value: &T) -> Result<Self> {
-        let payload = serde_json::to_value(value)
-            .map_err(|e| OxideError::Serialization(e.to_string()))?;
+        let payload =
+            serde_json::to_value(value).map_err(|e| OxideError::Serialization(e.to_string()))?;
         Ok(Self {
             topic: topic.into(),
             payload,
