@@ -1,0 +1,22 @@
+@startuml OxideError
+!theme plain
+
+enum OxideError {
+  Zmq(zmq::Error)
+  Serialization(String)
+  Configuration(String)
+  Connection(String)
+  Send(String)
+  Receive(String)
+}
+
+note right of OxideError
+  Error types that can occur 
+  in the Oxide messaging framework.
+  
+  Implements Display, Error traits
+  and provides From conversions for
+  zmq::Error and serde_json::Error.
+end note
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml Message
+!theme plain
+
+class Message {
+  + topic: String
+  + payload: serde_json::Value
+  --
+  + new(topic: impl Into<String>, payload: serde_json::Value): Self
+  + from_value<T: Serialize>(topic: impl Into<String>, value: &T): Result<Self>
+  + to_bytes(&self): Result<Vec<u8>>
+  + from_bytes(bytes: &[u8]): Result<Self>
+  + payload_as<T: for<'de> Deserialize<'de>>(&self): Result<T>
+}
+
+note right of Message
+  A message that can be sent 
+  through the Oxide framework.
+  
+  Provides JSON serialization 
+  and deserialization.
+end note
+
+@enduml

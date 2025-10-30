@@ -1,0 +1,23 @@
+@startuml Replier
+!theme plain
+
+class Replier {
+  - socket: Socket
+  --
+  + new(address: &str): Result<Self>
+  + receive(&self): Result<Message>
+  + receive_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+  + reply(&self, message: &Message): Result<()>
+}
+
+note right of Replier
+  Replier for the request/reply 
+  pattern (server side).
+  
+  Binds to an address and receives
+  requests, sending back replies.
+  
+  Uses ZeroMQ REP socket.
+end note
+
+@enduml

@@ -1,0 +1,131 @@
+@startuml RepositoryOverview
+!theme plain
+
+title Oxide Message Framework - Repository Overview
+
+package "Core Types" {
+  class Message {
+    + topic: String
+    + payload: serde_json::Value
+    --
+    + new(topic: impl Into<String>, payload: serde_json::Value): Self
+    + from_value<T: Serialize>(topic: impl Into<String>, value: &T): Result<Self>
+    + to_bytes(&self): Result<Vec<u8>>
+    + from_bytes(bytes: &[u8]): Result<Self>
+    + payload_as<T: for<'de> Deserialize<'de>>(&self): Result<T>
+  }
+
+  enum OxideError {
+    Zmq(zmq::Error)
+    Serialization(String)
+    Configuration(String)
+    Connection(String)
+    Send(String)
+    Receive(String)
+  }
+}
+
+package "Pub/Sub Pattern" {
+  class Publisher {
+    - socket: Socket
+    --
+    + new(address: &str): Result<Self>
+    + publish(&self, message: &Message): Result<()>
+    + publish_raw(&self, topic: &str, data: &[u8]): Result<()>
+  }
+
+  class Subscriber {
+    - socket: Socket
+    --
+    + new(address: &str): Result<Self>
+    + subscribe(&self, topic: &str): Result<()>
+    + unsubscribe(&self, topic: &str): Result<()>
+    + receive(&self): Result<Message>
+    + receive_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+    + try_receive(&self): Result<Option<Message>>
+  }
+}
+
+package "Request/Reply Pattern" {
+  class Requester {
+    - socket: Socket
+    --
+    + new(address: &str): Result<Self>
+    + request(&self, message: &Message): Result<Message>
+    + request_timeout(&self, message: &Message, timeout_ms: i32): Result<Option<Message>>
+  }
+
+  class Replier {
+    - socket: Socket
+    --
+    + new(address: &str): Result<Self>
+    + receive(&self): Result<Message>
+    + receive_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+    + reply(&self, message: &Message): Result<()>
+  }
+}
+
+package "Pipeline Pattern" {
+  class Pusher {
+    - socket: Socket
+    --
+    + new_bind(address: &str): Result<Self>
+    + new_connect(address: &str): Result<Self>
+    + push(&self, message: &Message): Result<()>
+  }
+
+  class Puller {
+    - socket: Socket
+    --
+    + new_bind(address: &str): Result<Self>
+    + new_connect(address: &str): Result<Self>
+    + pull(&self): Result<Message>
+    + pull_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+    + try_pull(&self): Result<Option<Message>>
+  }
+}
+
+' Relationships
+Publisher ..> Message : publishes
+Subscriber ..> Message : receives
+Requester ..> Message : sends/receives
+Replier ..> Message : receives/sends
+Pusher ..> Message : pushes
+Puller ..> Message : pulls
+
+Publisher ..> OxideError : returns
+Subscriber ..> OxideError : returns
+Requester ..> OxideError : returns
+Replier ..> OxideError : returns
+Pusher ..> OxideError : returns
+Puller ..> OxideError : returns
+Message ..> OxideError : returns
+
+' Pattern interactions
+Publisher "1" -- "*" Subscriber : broadcasts to
+Requester "1" -- "1" Replier : request/reply
+Pusher "1" -- "*" Puller : distributes to
+
+note right of "Core Types"
+  Message and OxideError are the
+  fundamental types used across
+  all messaging patterns.
+end note
+
+note bottom of "Pub/Sub Pattern"
+  Publisher broadcasts messages to
+  multiple subscribers. Subscribers
+  filter by topic.
+end note
+
+note bottom of "Request/Reply Pattern"
+  Synchronous request/reply pattern.
+  Requester sends, waits for reply.
+end note
+
+note bottom of "Pipeline Pattern"
+  Push/Pull for load balancing work.
+  Tasks distributed across workers.
+end note
+
+@enduml

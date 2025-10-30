@@ -1,0 +1,23 @@
+@startuml Puller
+!theme plain
+
+class Puller {
+  - socket: Socket
+  --
+  + new_bind(address: &str): Result<Self>
+  + new_connect(address: &str): Result<Self>
+  + pull(&self): Result<Message>
+  + pull_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+  + try_pull(&self): Result<Option<Message>>
+}
+
+note right of Puller
+  Puller for the push/pull pattern.
+  
+  Receives tasks from pushers
+  in a load-balanced manner.
+  
+  Uses ZeroMQ PULL socket.
+end note
+
+@enduml
