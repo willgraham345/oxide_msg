@@ -1,0 +1,21 @@
+@startuml Publisher
+!theme plain
+
+class Publisher {
+  - socket: Socket
+  --
+  + new(address: &str): Result<Self>
+  + publish(&self, message: &Message): Result<()>
+  + publish_raw(&self, topic: &str, data: &[u8]): Result<()>
+}
+
+note right of Publisher
+  Publisher for the pub/sub pattern.
+  
+  Binds to an address and broadcasts
+  messages to all connected subscribers.
+  
+  Uses ZeroMQ PUB socket.
+end note
+
+@enduml

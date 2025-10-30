@@ -1,0 +1,22 @@
+@startuml Requester
+!theme plain
+
+class Requester {
+  - socket: Socket
+  --
+  + new(address: &str): Result<Self>
+  + request(&self, message: &Message): Result<Message>
+  + request_timeout(&self, message: &Message, timeout_ms: i32): Result<Option<Message>>
+}
+
+note right of Requester
+  Requester for the request/reply 
+  pattern (client side).
+  
+  Connects to a replier and sends
+  requests, waiting for replies.
+  
+  Uses ZeroMQ REQ socket.
+end note
+
+@enduml

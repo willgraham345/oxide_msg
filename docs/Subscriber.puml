@@ -1,0 +1,24 @@
+@startuml Subscriber
+!theme plain
+
+class Subscriber {
+  - socket: Socket
+  --
+  + new(address: &str): Result<Self>
+  + subscribe(&self, topic: &str): Result<()>
+  + unsubscribe(&self, topic: &str): Result<()>
+  + receive(&self): Result<Message>
+  + receive_timeout(&self, timeout_ms: i32): Result<Option<Message>>
+  + try_receive(&self): Result<Option<Message>>
+}
+
+note right of Subscriber
+  Subscriber for the pub/sub pattern.
+  
+  Connects to a publisher address and
+  receives messages on subscribed topics.
+  
+  Uses ZeroMQ SUB socket.
+end note
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml Pusher
+!theme plain
+
+class Pusher {
+  - socket: Socket
+  --
+  + new_bind(address: &str): Result<Self>
+  + new_connect(address: &str): Result<Self>
+  + push(&self, message: &Message): Result<()>
+}
+
+note right of Pusher
+  Pusher for the push/pull pattern.
+  
+  Sends tasks to workers (pullers)
+  in a load-balanced manner.
+  
+  Uses ZeroMQ PUSH socket.
+end note
+
+@enduml
