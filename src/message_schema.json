@@ -23,8 +23,9 @@
     },
     "protocol": {
       "type": "string",
-      "description": "The protocol used for message transmission",
-      "examples": ["tcp", "udp", "ipc", "inproc"]
+      "description": "The protocol used for message transmission (ZeroMQ transport)",
+      "enum": ["tcp", "udp", "ipc", "inproc", "pgm", "epgm"],
+      "examples": ["tcp", "ipc", "inproc"]
     },
     "packetizer": {
       "type": "string",
@@ -72,14 +73,15 @@
     },
     "server": {
       "type": "string",
-      "description": "The server address or identifier for this message",
+      "description": "The server address or identifier for this message (ZeroMQ endpoint)",
+      "pattern": "^(tcp|udp|ipc|inproc|pgm|epgm)://[^\\s]+$",
       "examples": ["tcp://127.0.0.1:5555", "ipc:///tmp/oxide_msg", "tcp://*:5556"]
     },
     "message_type": {
       "type": "string",
       "description": "The type or pattern of the message",
       "enum": ["pubsub", "reqrep", "pipeline", "custom"],
-      "examples": ["pubsub", "reqrep", "pipeline"]
+      "examples": ["pubsub", "reqrep", "pipeline", "custom"]
     }
   },
   "additionalProperties": false
