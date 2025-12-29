@@ -30,6 +30,7 @@
     "packetizer": {
       "type": "string",
       "description": "The packetizer method used for message serialization",
+      "enum": ["json", "msgpack", "protobuf", "raw"],
       "examples": ["json", "msgpack", "protobuf", "raw"]
     },
     "hardware_interface": {
@@ -73,9 +74,9 @@
     },
     "server": {
       "type": "string",
-      "description": "The server address or identifier for this message (ZeroMQ endpoint)",
-      "pattern": "^(tcp|udp|ipc|inproc|pgm|epgm)://[^\\s]+$",
-      "examples": ["tcp://127.0.0.1:5555", "ipc:///tmp/oxide_msg", "tcp://*:5556"]
+      "description": "The server address or identifier for this message (ZeroMQ endpoint). Format examples: tcp://hostname:port, ipc:///path, inproc://name",
+      "pattern": "^(tcp://[^:/\\s]+:[0-9]+|udp://[^:/\\s]+:[0-9]+|ipc:///[^\\s]+|inproc://[^\\s]+|pgm://[^\\s]+|epgm://[^\\s]+)$",
+      "examples": ["tcp://127.0.0.1:5555", "ipc:///tmp/oxide_msg", "tcp://*:5556", "inproc://my_socket"]
     },
     "message_type": {
       "type": "string",

@@ -100,11 +100,14 @@ The schema follows JSON Schema Draft 07 specification and can be used with any J
 
 This schema is designed to document messages used in the Oxide messaging framework. While the framework uses JSON for runtime message payloads, this YAML schema provides a standardized way to document message configurations, routing rules, and metadata.
 
-For runtime message structure, refer to the `Message` struct in `src/message.rs`:
+For the runtime message structure used by the framework, refer to the `Message` struct in `src/message.rs`:
 
 ```rust
+// Simplified view of the runtime Message struct
 pub struct Message {
     pub topic: String,
     pub payload: serde_json::Value,
 }
 ```
+
+Note: The actual implementation includes additional methods like `to_bytes()`, `from_bytes()`, `from_value()`, and `payload_as()` for serialization and deserialization. See the source code for complete details.
