@@ -80,9 +80,9 @@
     },
     "message_type": {
       "type": "string",
-      "description": "The type or pattern of the message",
-      "enum": ["pubsub", "reqrep", "pipeline", "custom"],
-      "examples": ["pubsub", "reqrep", "pipeline", "custom"]
+      "description": "The type of the message",
+      "enum": ["enumeration", "command", "telemetry", "notification"],
+      "examples": ["enumeration", "command", "telemetry", "notification"]
     }
   },
   "additionalProperties": false

@@ -15,4 +15,4 @@ blacklist_nodes:
   - "legacy_system"
   - "deprecated_node"
 server: "tcp://127.0.0.1:5555"
-message_type: "pubsub"
+message_type: "telemetry"
