@@ -1,0 +1,18 @@
+# Example message documentation using the message_schema.json
+# This file demonstrates how to document a message in YAML format
+# following the schema defined in message_schema.json
+
+message_name: "sensor_telemetry"
+protocol: "tcp"
+packetizer: "json"
+hardware_interface: "eth0"  # Optional field
+base_node: "sensor_controller"
+whitelist_nodes:
+  - "telemetry_processor"
+  - "data_logger"
+  - "monitoring_dashboard"
+blacklist_nodes:
+  - "legacy_system"
+  - "deprecated_node"
+server: "tcp://127.0.0.1:5555"
+message_type: "pubsub"

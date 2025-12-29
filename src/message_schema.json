@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/willgraham345/oxide_msg/message_schema.json",
+  "title": "Oxide Message Documentation Schema",
+  "description": "Schema for documenting messages in the Oxide messaging framework",
+  "type": "object",
+  "required": [
+    "message_name",
+    "protocol",
+    "packetizer",
+    "base_node",
+    "whitelist_nodes",
+    "blacklist_nodes",
+    "server",
+    "message_type"
+  ],
+  "properties": {
+    "message_name": {
+      "type": "string",
+      "description": "The name of the message",
+      "minLength": 1,
+      "examples": ["sensor_data", "command_request", "telemetry_update"]
+    },
+    "protocol": {
+      "type": "string",
+      "description": "The protocol used for message transmission",
+      "examples": ["tcp", "udp", "ipc", "inproc"]
+    },
+    "packetizer": {
+      "type": "string",
+      "description": "The packetizer method used for message serialization",
+      "examples": ["json", "msgpack", "protobuf", "raw"]
+    },
+    "hardware_interface": {
+      "type": "string",
+      "description": "Optional hardware interface specification for the message",
+      "examples": ["eth0", "can0", "serial0", "usb0"]
+    },
+    "base_node": {
+      "type": "string",
+      "description": "The base node that originates or manages this message",
+      "minLength": 1,
+      "examples": ["controller", "sensor_hub", "gateway", "manager"]
+    },
+    "whitelist_nodes": {
+      "type": "array",
+      "description": "List of nodes explicitly allowed to receive or send this message",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "examples": [
+        ["node1", "node2", "node3"],
+        ["controller", "monitor"],
+        []
+      ]
+    },
+    "blacklist_nodes": {
+      "type": "array",
+      "description": "List of nodes explicitly denied from receiving or sending this message",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "examples": [
+        ["untrusted_node", "legacy_system"],
+        [],
+        ["backup_node"]
+      ]
+    },
+    "server": {
+      "type": "string",
+      "description": "The server address or identifier for this message",
+      "examples": ["tcp://127.0.0.1:5555", "ipc:///tmp/oxide_msg", "tcp://*:5556"]
+    },
+    "message_type": {
+      "type": "string",
+      "description": "The type or pattern of the message",
+      "enum": ["pubsub", "reqrep", "pipeline", "custom"],
+      "examples": ["pubsub", "reqrep", "pipeline"]
+    }
+  },
+  "additionalProperties": false
+}
