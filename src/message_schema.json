@@ -6,13 +6,12 @@
   "type": "object",
   "required": [
     "message_name",
-    "protocol",
+    "type",
+    "data",
     "packetizer",
-    "base_node",
-    "whitelist_nodes",
-    "blacklist_nodes",
-    "server",
-    "message_type"
+    "security",
+    "owner",
+    "server"
   ],
   "properties": {
     "message_name": {
@@ -52,11 +51,7 @@
         "minLength": 1
       },
       "uniqueItems": true,
-      "examples": [
-        ["node1", "node2", "node3"],
-        ["controller", "monitor"],
-        []
-      ]
+      "examples": [["node1", "node2", "node3"], ["controller", "monitor"], []]
     },
     "blacklist_nodes": {
       "type": "array",
@@ -66,17 +61,18 @@
         "minLength": 1
       },
       "uniqueItems": true,
-      "examples": [
-        ["untrusted_node", "legacy_system"],
-        [],
-        ["backup_node"]
-      ]
+      "examples": [["untrusted_node", "legacy_system"], [], ["backup_node"]]
     },
     "server": {
       "type": "string",
       "description": "The server address or identifier for this message (ZeroMQ endpoint). Format examples: tcp://hostname:port, ipc:///path, inproc://name",
       "pattern": "^(tcp://[^:/\\s]+:[0-9]+|udp://[^:/\\s]+:[0-9]+|ipc:///[^\\s]+|inproc://[^\\s]+|pgm://[^\\s]+|epgm://[^\\s]+)$",
-      "examples": ["tcp://127.0.0.1:5555", "ipc:///tmp/oxide_msg", "tcp://*:5556", "inproc://my_socket"]
+      "examples": [
+        "tcp://127.0.0.1:5555",
+        "ipc:///tmp/oxide_msg",
+        "tcp://*:5556",
+        "inproc://my_socket"
+      ]
     },
     "message_type": {
       "type": "string",
